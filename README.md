@@ -20,6 +20,7 @@ Desarrollar una aplicación que implemente algoritmos para encontrar la ruta óp
 - Carrera: Ingeniería en Ciencias de la Computación  
 - Asignatura: Estructura de Datos  
 - Estudiantes: Byron Xavier Ortega Delgado (bortgead@est.ups.edu.ec)  
+               Dave Fernando Siguenza Vallejo (dsiguenzav@est.ups.edu.ec)
 - Docente: Ing. Pablo Torres  
 
 ---
