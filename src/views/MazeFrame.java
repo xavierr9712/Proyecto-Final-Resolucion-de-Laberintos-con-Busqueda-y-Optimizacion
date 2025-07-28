@@ -21,9 +21,12 @@ public class MazeFrame extends JFrame {
         setLocationRelativeTo(null);
 
         mazePanel = new MazePanel();
-        add(mazePanel, BorderLayout.CENTER);
+        JPanel mazeWrapper = new JPanel(new GridBagLayout()); // Panel con layout que centra
+        mazeWrapper.add(mazePanel); // Agregamos el mazePanel dentro centrado
+        add(mazeWrapper, BorderLayout.CENTER); // mazeWrapper se agrega al centro del JFrame
+
         
-        JPanel controlPanel = new JPanel();
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         
         controlPanel.add(new JLabel("Filas:"));
         rowsField = new JTextField("20", 3);

@@ -22,7 +22,8 @@ public class MazePanel  extends JPanel{
                 if (controller != null) {
                     int col = e.getX() / cellSize;
                     int row = e.getY() / cellSize;
-                    controller.handleCellClick(row, col);
+                    if (row < maze.length && col < maze[0].length)
+                        controller.handleCellClick(row, col);
                 }
             }
         });
@@ -34,8 +35,15 @@ public class MazePanel  extends JPanel{
 
     public void setMaze(Cell[][] maze) {
         this.maze = maze;
+        if (maze != null) {
+            int width = maze[0].length * cellSize;
+            int height = maze.length * cellSize;
+            setPreferredSize(new java.awt.Dimension(width, height));
+            revalidate(); // Muy importante
+        }
         repaint();
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {
