@@ -21,12 +21,9 @@ public class MazeSolverRecursivoCompleto implements MazeSolver {
         boolean found = findPath(maze, start.getRow(), start.getCol(), end);
 
         long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-<<<<<<< HEAD
-=======
+long duration = (endTime - startTime);
 
-        if (!found) path.clear();
->>>>>>> abc873989e8fbc7f88c2cf9da7e7a783135cdfd0
+if (!found) path.clear();
 
         String mazeSize = maze.length + "x" + maze[0].length;
         AlgorithmResult algoResult = new AlgorithmResult("Recursivo (4 dir)", path.size(), duration, mazeSize);

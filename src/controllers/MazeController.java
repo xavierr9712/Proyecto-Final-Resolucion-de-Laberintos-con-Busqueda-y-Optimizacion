@@ -203,61 +203,34 @@ public class MazeController {
         List<Cell> visited = result.getVisited();
         List<Cell> path = result.getPath();
 
-<<<<<<< HEAD
-                return solver.solve(mazeCopy, startCopy, endCopy);
+    new Thread(() -> {
+        try {
+            // Primero, animar las celdas visitadas (gris)
+            for (Cell cell : visited) {
+                if (cell != start && cell != end && cell.getState() != CellState.WALL) {
+                    cell.setState(CellState.VISITED);
+                    SwingUtilities.invokeLater(() -> view.updateMaze(maze));
+                    Thread.sleep(30); // puedes ajustar velocidad
+                }
             }
 
-            @Override
-            protected void done() {
-                try { 
-                    SolveResults solveResults = get(); // Obtener el resultado de doInBackground
-                    List<Cell> path = solveResults.getPath();
-                    AlgorithmResult algoResult = solveResults.getResultDetails();
-
-                    if (!path.isEmpty()) {
-                        // Marcar el camino en el laberinto original (el que se muestra en MazePanel)
-                        for (Cell cell : path) {
-                            // Solo cambiar el estado si no es el inicio o el fin
-                            if (cell.getState() != CellState.START && cell.getState() != CellState.END) {
-                                maze[cell.getRow()][cell.getCol()].setState(CellState.PATH);
-                            }
-                        }
-                        resultDAO.save(algoResult);
-                        JOptionPane.showMessageDialog(view, 
-                            "Ruta encontrada en " + algoResult.getExecutionTimeMillis() + " ns. Longitud: " + algoResult.getPathLength(),
-                            "Solución Exitosa", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(view, "No se encontró una ruta.", "Sin Solución", JOptionPane.WARNING_MESSAGE);
-=======
-        new Thread(() -> {
-            try {
-                // Primero, animar las celdas visitadas (gris)
-                for (Cell cell : visited) {
-                    if (cell != start && cell != end && cell.getState() != CellState.WALL) {
-                        cell.setState(CellState.VISITED);
-                        SwingUtilities.invokeLater(() -> view.updateMaze(maze));
-                        Thread.sleep(30); // puedes ajustar velocidad
->>>>>>> abc873989e8fbc7f88c2cf9da7e7a783135cdfd0
-                    }
+            // Luego, animar el camino final (celeste)
+            for (Cell cell : path) {
+                if (cell != start && cell != end) {
+                    cell.setState(CellState.PATH);
+                    SwingUtilities.invokeLater(() -> view.updateMaze(maze));
+                    Thread.sleep(50); // puedes ajustar velocidad
                 }
-
-                // Luego, animar el camino final (celeste)
-                for (Cell cell : path) {
-                    if (cell != start && cell != end) {
-                        cell.setState(CellState.PATH);
-                        SwingUtilities.invokeLater(() -> view.updateMaze(maze));
-                        Thread.sleep(50); // puedes ajustar velocidad
-                    }
-                }
-
-                // Guardar resultados
-                resultDAO.save(result.getResultDetails());
-
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
             }
-        }).start();
-    }
+
+            // Guardar resultados
+            resultDAO.save(result.getResultDetails());
+
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }).start();
+}
     
     // Método auxiliar para crear una copia profunda del laberinto
     private Cell[][] createDeepCopyOfMaze(Cell[][] originalMaze) {

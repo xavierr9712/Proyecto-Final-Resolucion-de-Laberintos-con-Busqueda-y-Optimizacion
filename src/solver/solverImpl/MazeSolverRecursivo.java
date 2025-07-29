@@ -17,19 +17,10 @@ public class MazeSolverRecursivo implements MazeSolver{
         path = new ArrayList<>();
         visitedCells = new ArrayList<>();
         visited = new boolean[maze.length][maze[0].length];
-<<<<<<< HEAD
-        
-        boolean found = findPath(maze, start.getRow(), start.getCol(), end);
-        
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-=======
->>>>>>> abc873989e8fbc7f88c2cf9da7e7a783135cdfd0
+boolean found = findPath(maze, start.getRow(), start.getCol(), end);
 
-        boolean found = findPath(maze, start.getRow(), start.getCol(), end);
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
+long endTime = System.nanoTime();
+long duration = (endTime - startTime);
 
         if (!found) path.clear();
 
