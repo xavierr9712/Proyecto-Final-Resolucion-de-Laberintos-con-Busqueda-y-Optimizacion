@@ -160,53 +160,40 @@ Se utilizan estructuras como matrices, listas, colas, pilas, mapas y conjuntos p
 ## Capturas de Pantalla
 
 - **Interfaz Principal:**  
+
 ![alt text](<Interfaz Principal.png>)
 
-**Colacamos Incion y Fin:** 
+- **Colacamos Incion-Fin y Colacamos Obstaculos:**
 
-![alt text](<Inicio Fin.png>)
+![alt text](<Colacamos Incion-Fin y Colacamos Obstaculos.png>)
 
-**Colacamos Obstaculos:** 
+- **Visualización BFS:** 
 
-![alt text](<Colocamos Obsataculos.png>)
+![alt text](BFS.png)
 
-**Visualización BFS:** 
+- **Visualización DFS:** 
 
-![alt text](<Screenshot 2025-07-27 170555.png>)
+![alt text](DFS.png)
 
-![alt text](<Screenshot 2025-07-27 170638.png>)
+- **Visualización Reculsivo:** 
 
-**Visualización DFS:** 
+![alt text](Recursivo.png)
 
-![alt text](<Screenshot 2025-07-27 170722.png>)
+- **Visualización Reculsivo Completo:** 
 
-![alt text](<Screenshot 2025-07-27 170800.png>)
+![alt text](RecursivoCompleto.png)
 
-**Visualización Reculsivo:** 
+- **Visualización Reculsivo Completo BT:**
 
-![alt text](<Screenshot 2025-07-27 170847.png>)
+![alt text](RecursivoBT.png)
 
-![alt text](<Screenshot 2025-07-27 170928.png>)
+- **Visualización Tabla De Resultados:**
 
-**Visualización Reculsivo Completo:** 
+![alt text](TablaResultados.png)
 
-![alt text](<Screenshot 2025-07-27 171004.png>)
+- **Visualización Grafica De Resultados:** 
 
-![alt text](<Screenshot 2025-07-27 171035.png>)
-
-**Visualización Reculsivo Completo BT:**
-
-![alt text](<Screenshot 2025-07-27 171107.png>)
-
-![alt text](<Screenshot 2025-07-27 171134.png>)
-
-**Visualización Tabla De Resultados:**
-
-![alt text](<Screenshot 2025-07-27 171310-1.png>)
-
-**Visualización Grafica De Resultados:** 
-
-![alt text](<Screenshot 2025-07-27 171351.png>)
+![alt text](Grafiaca.png)
 
 
 ## Conclusiones
