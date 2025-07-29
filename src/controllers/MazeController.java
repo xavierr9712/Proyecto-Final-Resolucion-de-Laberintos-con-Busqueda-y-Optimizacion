@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker; // Import SwingWorker
 import dao.AlgorithmResultDAO;
 import dao.daoImpl.AlgorithmResultDAOFile;
@@ -12,10 +13,94 @@ import views.MazeFrame;
 import views.ResultadosDialog;
 
 public class MazeController {
+    private List<Cell> stepByStepVisited;
+    private List<Cell> stepByStepPath;
+    private int currentStepIndex = 0;
+    private boolean drawingVisited = true;
     private final MazeFrame view;
     private final AlgorithmResultDAO resultDAO;
     private Cell[][] maze;
     private Cell start, end;
+
+    public void startStepByStepSolve(String algorithmName) {
+        cleanMazePathAndVisited();
+
+        if (start == null || end == null) {
+            JOptionPane.showMessageDialog(view, "Debe seleccionar un punto de inicio y un punto final.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        MazeSolver solver;
+        switch (algorithmName) {
+            case "DFS": solver = new MazeSolverDFS(); break;
+            case "Recursivo": solver = new MazeSolverRecursivo(); break;
+            case "Recursivo Completo": solver = new MazeSolverRecursivoCompleto(); break;
+            case "Recursivo Completo BT": solver = new MazeSolverRecursivoCompletoBT(); break;
+            case "BFS":
+            default: solver = new MazeSolverBFS(); break;
+        }
+
+        SolveResults result = solver.solve(maze, start, end);
+
+        this.stepByStepVisited = result.getVisited();
+        this.stepByStepPath = result.getPath();
+        this.currentStepIndex = 0;
+        this.drawingVisited = true;
+
+        // Pinta solo el inicio sin hacer nada aún
+        view.updateMaze(maze);
+    }
+
+    public void doStep() {
+        if (drawingVisited && currentStepIndex < stepByStepVisited.size()) {
+            Cell cell = stepByStepVisited.get(currentStepIndex);
+            if (cell != start && cell != end && cell.getState() != CellState.WALL) {
+                cell.setState(CellState.VISITED);
+            }
+            currentStepIndex++;
+            view.updateMaze(maze);
+        } else if (drawingVisited) {
+            // Pasamos a pintar el path
+            drawingVisited = false;
+            currentStepIndex = 0;
+        } else if (currentStepIndex < stepByStepPath.size()) {
+            Cell cell = stepByStepPath.get(currentStepIndex);
+            if (cell != start && cell != end) {
+                cell.setState(CellState.PATH);
+            }
+            currentStepIndex++;
+            view.updateMaze(maze);
+        }
+
+        if (!drawingVisited && currentStepIndex >= stepByStepPath.size()) {
+            currentStepIndex = 0;
+            drawingVisited = true;
+            stepByStepVisited = null;
+            stepByStepPath = null;
+
+            // reset desde MazeFrame
+            view.resetStepByStepFlag(); // <-- lo agregas
+        }
+    }
+
+    public void clearPathsOnly() {
+        for (int r = 0; r < maze.length; r++) {
+            for (int c = 0; c < maze[0].length; c++) {
+                Cell cell = maze[r][c];
+                if (cell.getState() == CellState.PATH || cell.getState() == CellState.VISITED) {
+                    cell.setState(CellState.EMPTY);
+                }
+                cell.setParent(null);
+            }
+        }
+
+        // Asegurar que START y END se mantengan
+        if (start != null) start.setState(CellState.START);
+        if (end != null) end.setState(CellState.END);
+
+        view.updateMaze(maze);
+    }
+
 
     public MazeController(MazeFrame view) {
         this.view = view;
@@ -98,51 +183,27 @@ public class MazeController {
     }
 
     public void solveMaze(String algorithmName) {
+        cleanMazePathAndVisited();
         if (start == null || end == null) {
-            JOptionPane.showMessageDialog(view, "Por favor, define un punto de INICIO y FIN.", "Error de Laberinto", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(view, "Debe seleccionar un punto de inicio y un punto final.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        // Limpiar cualquier ruta o estado visitado anterior
-        cleanMazePathAndVisited(); 
 
-        // Usar SwingWorker para ejecutar la lógica de resolución en segundo plano
-        new SwingWorker<SolveResults, Cell>() {
-            private String currentAlgorithmName = algorithmName;
+        MazeSolver solver;
+        switch (algorithmName) {
+            case "DFS": solver = new MazeSolverDFS(); break;
+            case "Recursivo": solver = new MazeSolverRecursivo(); break;
+            case "Recursivo Completo": solver = new MazeSolverRecursivoCompleto(); break;
+            case "Recursivo Completo BT": solver = new MazeSolverRecursivoCompletoBT(); break;
+            case "BFS":
+            default: solver = new MazeSolverBFS(); break;
+        }
 
-            @Override
-            protected SolveResults doInBackground() throws Exception {
-                MazeSolver solver;
-                switch (currentAlgorithmName) {
-                    case "BFS":
-                        solver = new MazeSolverBFS();
-                        break;
-                    case "DFS":
-                        solver = new MazeSolverDFS();
-                        break;
-                    case "Recursivo":
-                        solver = new MazeSolverRecursivo();
-                        break;
-                    case "Recursivo Completo":
-                        solver = new MazeSolverRecursivoCompleto();
-                        break;
-                    case "Recursivo Completo BT":
-                        solver = new MazeSolverRecursivoCompletoBT();
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Algoritmo desconocido: " + currentAlgorithmName);
-                }
-                
-                // Crear una copia profunda del laberinto para que el solver trabaje
-                // Esto asegura que el solver no modifique el laberinto original
-                // hasta que la solución sea final, y evita problemas entre ejecuciones.
-                Cell[][] mazeCopy = createDeepCopyOfMaze(maze);
-                
-                // Encontrar las celdas de inicio y fin en la copia del laberinto
-                // Son necesarias porque las celdas de la copia son objetos diferentes
-                Cell startCopy = findCellInMaze(mazeCopy, start.getRow(), start.getCol());
-                Cell endCopy = findCellInMaze(mazeCopy, end.getRow(), end.getCol());
+        SolveResults result = solver.solve(maze, start, end);
+        List<Cell> visited = result.getVisited();
+        List<Cell> path = result.getPath();
 
+<<<<<<< HEAD
                 return solver.solve(mazeCopy, startCopy, endCopy);
             }
 
@@ -167,15 +228,35 @@ public class MazeController {
                             "Solución Exitosa", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(view, "No se encontró una ruta.", "Sin Solución", JOptionPane.WARNING_MESSAGE);
+=======
+        new Thread(() -> {
+            try {
+                // Primero, animar las celdas visitadas (gris)
+                for (Cell cell : visited) {
+                    if (cell != start && cell != end && cell.getState() != CellState.WALL) {
+                        cell.setState(CellState.VISITED);
+                        SwingUtilities.invokeLater(() -> view.updateMaze(maze));
+                        Thread.sleep(30); // puedes ajustar velocidad
+>>>>>>> abc873989e8fbc7f88c2cf9da7e7a783135cdfd0
                     }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(view, "Error al resolver el laberinto: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    e.printStackTrace();
-                } finally {
-                    view.updateMaze(maze); // Actualizar el laberinto en la vista para mostrar el camino o resetear
                 }
+
+                // Luego, animar el camino final (celeste)
+                for (Cell cell : path) {
+                    if (cell != start && cell != end) {
+                        cell.setState(CellState.PATH);
+                        SwingUtilities.invokeLater(() -> view.updateMaze(maze));
+                        Thread.sleep(50); // puedes ajustar velocidad
+                    }
+                }
+
+                // Guardar resultados
+                resultDAO.save(result.getResultDetails());
+
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
-        }.execute(); // Ejecutar el SwingWorker
+        }).start();
     }
     
     // Método auxiliar para crear una copia profunda del laberinto

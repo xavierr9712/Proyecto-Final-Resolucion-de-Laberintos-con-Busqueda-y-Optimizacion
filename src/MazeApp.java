@@ -12,6 +12,5 @@ public class MazeApp {
             
             view.setVisible(true);
         });
-       
     }
 }
