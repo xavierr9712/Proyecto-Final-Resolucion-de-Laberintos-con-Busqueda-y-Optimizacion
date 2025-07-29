@@ -7,6 +7,16 @@ public class AlgorithmResult {
     private long executionTimeNanos;
     private String mazeSize;
 
+    public int getRows() {
+        String[] parts = mazeSize.toLowerCase().split("x");
+        return Integer.parseInt(parts[0].trim());
+    }
+
+    public int getCols() {
+        String[] parts = mazeSize.toLowerCase().split("x");
+        return Integer.parseInt(parts[1].trim());
+    }
+
     public AlgorithmResult(String algorithmName, int pathLength, long executionTimeNanos, String mazeSize) {
         this.algorithmName = algorithmName;
         this.pathLength = pathLength;

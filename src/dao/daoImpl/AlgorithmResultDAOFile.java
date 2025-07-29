@@ -25,11 +25,22 @@ public class AlgorithmResultDAOFile implements AlgorithmResultDAO{
 
     @Override
     public void save(AlgorithmResult result) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
-            writer.write(String.join(",", result.toCsvRow()));
-            writer.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<AlgorithmResult> allResults = findAll();
+        boolean exists = allResults.stream().anyMatch(r ->
+            r.getAlgorithmName().equals(result.getAlgorithmName()) &&
+            r.getRows() == result.getRows() &&
+            r.getCols() == result.getCols()
+        );
+
+        if (exists) {
+            update(result);
+        } else {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath, true))) {
+                writer.write(String.join(",", result.toCsvRow()));
+                writer.newLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -37,7 +48,9 @@ public class AlgorithmResultDAOFile implements AlgorithmResultDAO{
     public void update(AlgorithmResult result) {
         List<AlgorithmResult> allResults = findAll();
         List<AlgorithmResult> updatedList = allResults.stream()
-            .filter(r -> !r.getAlgorithmName().equals(result.getAlgorithmName()))
+            .filter(r -> !(r.getAlgorithmName().equals(result.getAlgorithmName())
+            && r.getRows() == result.getRows()
+            && r.getCols() == result.getCols()))
             .collect(Collectors.toList());
         updatedList.add(result);
         
