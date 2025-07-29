@@ -20,7 +20,7 @@ public class MazeSolverRecursivoCompletoBT implements MazeSolver{
         boolean found = findPath(maze, start.getRow(), start.getCol(), end);
 
         long endTime = System.nanoTime();
-        long duration = (endTime - startTime) / 1000000;
+        long duration = (endTime - startTime);
         
         if (found) {
             Collections.reverse(path);

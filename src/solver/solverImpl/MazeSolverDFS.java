@@ -39,7 +39,7 @@ public class MazeSolverDFS implements MazeSolver {
         }
 
         long endTime = System.nanoTime();
-        long duration = (endTime - startTime) / 1000000;
+        long duration = (endTime - startTime);
 
         List<Cell> path = new ArrayList<>();
         if (found) {

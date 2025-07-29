@@ -148,7 +148,7 @@ public class MazeController {
 
             @Override
             protected void done() {
-                try {
+                try { 
                     SolveResults solveResults = get(); // Obtener el resultado de doInBackground
                     List<Cell> path = solveResults.getPath();
                     AlgorithmResult algoResult = solveResults.getResultDetails();
@@ -163,7 +163,7 @@ public class MazeController {
                         }
                         resultDAO.save(algoResult);
                         JOptionPane.showMessageDialog(view, 
-                            "Ruta encontrada en " + algoResult.getExecutionTimeMillis() + " ms. Longitud: " + algoResult.getPathLength(),
+                            "Ruta encontrada en " + algoResult.getExecutionTimeMillis() + " ns. Longitud: " + algoResult.getPathLength(),
                             "Solución Exitosa", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(view, "No se encontró una ruta.", "Sin Solución", JOptionPane.WARNING_MESSAGE);

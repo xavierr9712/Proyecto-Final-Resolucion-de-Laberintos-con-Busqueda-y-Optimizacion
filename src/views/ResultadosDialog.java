@@ -31,7 +31,7 @@ public class ResultadosDialog  extends JDialog {
 
     private JPanel createTablePanel(List<AlgorithmResult> results) {
         JPanel panel = new JPanel(new BorderLayout());
-        String[] columnNames = {"Algoritmo", "Longitud Camino", "Tiempo (ms)", "Tamaño Laberinto"};
+        String[] columnNames = {"Algoritmo", "Longitud Camino", "Tiempo (ns)", "Tamaño Laberinto"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         for (AlgorithmResult result : results) {
@@ -57,7 +57,7 @@ public class ResultadosDialog  extends JDialog {
         JFreeChart barChart = ChartFactory.createBarChart(
             "Comparación de Tiempos de Ejecución",
             "Algoritmo",
-            "Tiempo (ms)",
+            "Tiempo (ns)",
             dataset,
             PlotOrientation.VERTICAL,
             true, true, false);
