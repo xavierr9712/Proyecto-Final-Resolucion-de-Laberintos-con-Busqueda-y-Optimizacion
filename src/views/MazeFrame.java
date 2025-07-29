@@ -17,7 +17,7 @@ public class MazeFrame extends JFrame {
 
     public MazeFrame() {
         setTitle("Resolvedor de Laberintos");
-setSize(1400, 720);
+        setSize(1400, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 

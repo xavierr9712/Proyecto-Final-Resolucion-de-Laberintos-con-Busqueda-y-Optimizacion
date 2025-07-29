@@ -20,7 +20,6 @@ Desarrollar una aplicación que implemente algoritmos para encontrar la ruta óp
 - Carrera: Ingeniería en Ciencias de la Computación  
 - Asignatura: Estructura de Datos  
 - Estudiantes: Byron Xavier Ortega Delgado (bortgead@est.ups.edu.ec)  
-               Dave Fernando Siguenza Vallejo (dsiguenzav@est.ups.edu.ec)
 - Docente: Ing. Pablo Torres  
 
 ---
@@ -125,3 +124,143 @@ Se utilizan estructuras como matrices, listas, colas, pilas, mapas y conjuntos p
 - CSV para almacenamiento de resultados
 
 ---
+
+## Interfaz de Usuario
+
+- Permite seleccionar el tamaño del laberinto
+- Marcar muros, punto de inicio y fin
+- Seleccionar algoritmo a usar
+- Visualizar resultados de la ejecución
+- Mostrar historial de resultados
+
+---
+
+## Comparación de Algoritmos
+
+| Algoritmo              | Tiempo (ms) | Longitud Ruta | Celdas Visitadas |
+|------------------------|-------------|----------------|-------------------|
+| BFS                   | 2           | 38             | 92                |
+| DFS                   | 4           | 57             | 211               |
+| Recursivo             | 5           | 57             | 207               |
+| Recursivo Completo    | 12          | 38             | 523               |
+| Recursivo Completo BT | 9           | 38             | 330               |
+
+*Los datos son ilustrativos. Los resultados reales pueden variar.*
+
+---
+
+## Resultados y Visualización
+
+- Los resultados se guardan en `results.csv`
+- Se visualizan en `ResultadosDialog`
+- Opcionalmente se pueden integrar gráficos con JFreeChart para comparar algoritmos
+
+---
+
+## Capturas de Pantalla
+
+- **Interfaz Principal:**  
+![alt text](<Interfaz Principal.png>)
+
+**Colacamos Incion y Fin:** 
+
+![alt text](<Inicio Fin.png>)
+
+**Colacamos Obstaculos:** 
+
+![alt text](<Colocamos Obsataculos.png>)
+
+**Visualización BFS:** 
+
+![alt text](<Screenshot 2025-07-27 170555.png>)
+
+![alt text](<Screenshot 2025-07-27 170638.png>)
+
+**Visualización DFS:** 
+
+![alt text](<Screenshot 2025-07-27 170722.png>)
+
+![alt text](<Screenshot 2025-07-27 170800.png>)
+
+**Visualización Reculsivo:** 
+
+![alt text](<Screenshot 2025-07-27 170847.png>)
+
+![alt text](<Screenshot 2025-07-27 170928.png>)
+
+**Visualización Reculsivo Completo:** 
+
+![alt text](<Screenshot 2025-07-27 171004.png>)
+
+![alt text](<Screenshot 2025-07-27 171035.png>)
+
+**Visualización Reculsivo Completo BT:**
+
+![alt text](<Screenshot 2025-07-27 171107.png>)
+
+![alt text](<Screenshot 2025-07-27 171134.png>)
+
+**Visualización Tabla De Resultados:**
+
+![alt text](<Screenshot 2025-07-27 171310-1.png>)
+
+**Visualización Grafica De Resultados:** 
+
+![alt text](<Screenshot 2025-07-27 171351.png>)
+
+
+## Conclusiones
+
+- BFS es ideal para encontrar caminos más cortos en laberintos no ponderados.
+- DFS y soluciones recursivas son útiles pero no siempre óptimas.
+- El patrón MVC facilitó la organización del código y su mantenimiento.
+- La integración de métricas permitió analizar el rendimiento de cada algoritmo.
+
+---
+
+## Conclusión Byron Xavier Ortega Delagado:
+
+## El Algoritmo Más Óptimo es BFS
+
+El análisis de los algoritmos de búsqueda para resolver laberintos revela que el BFS (Breadth-First Search) es la opción más óptima si el objetivo es encontrar la ruta más corta posible. Su principal fortaleza radica en la forma en que explora el laberinto.
+
+## ¿Por qué BFS es el más óptimo?
+Garantiza la ruta más corta: BFS explora todas las celdas en "capas" concéntricas desde el punto de inicio. Esto significa que visita todas las celdas a distancia 1, luego a distancia 2, y así sucesivamente. Cuando finalmente llega a la celda de destino, se asegura de que esta es la primera vez que se alcanza, lo que significa que el camino que encontró es el más corto en términos de número de pasos. Los otros algoritmos, como DFS, no pueden garantizar esto porque su búsqueda profunda podría desviarse por un camino largo antes de encontrar la salida.
+
+Complejidad y eficiencia: Aunque en términos de tiempo de ejecución (medido en milisegundos), a veces un algoritmo como DFS puede ser más rápido si la salida está en un camino recto, la eficiencia de BFS es más predecible. Su complejidad de tiempo es O(V+E), donde V es el número de vértices (celdas) y E es el número de aristas (caminos entre celdas), lo que es muy eficiente.
+
+En resumen, si la meta es siempre encontrar el camino más corto, BFS es la mejor elección. Para propósitos educativos y de demostración, los otros algoritmos son valiosos, pero en aplicaciones prácticas de búsqueda del camino más corto, BFS sobresale.
+
+## Recomendaciones
+
+- Incluir algoritmos heurísticos como A* o Dijkstra.
+- Incorporar obstáculos dinámicos.
+- Agregar pruebas automatizadas.
+- Mejorar la interfaz y compatibilidad multiplataforma.
+- Usar bases de datos o archivos JSON para persistencia.
+
+---
+
+## Cómo Ejecutar
+
+1. Compilar el proyecto con:
+
+```
+javac -d bin -cp "lib/*" src/**/*.java
+```
+
+2. Ejecutar la aplicación:
+
+```
+java -cp "bin:lib/*" MazeApp
+```
+
+En Windows usar `;` en lugar de `:` en el classpath.
+
+---
+
+## Versión
+
+- Versión: 1.0.0  
+- Descripción: Proyecto Final – Estructura de Datos
+
