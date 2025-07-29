@@ -20,6 +20,7 @@ Desarrollar una aplicación que implemente algoritmos para encontrar la ruta óp
 - Carrera: Ingeniería en Ciencias de la Computación  
 - Asignatura: Estructura de Datos  
 - Estudiantes: Byron Xavier Ortega Delgado (bortgead@est.ups.edu.ec)  
+                Dave Fernado Siguencia Vallejo(dsiguenzav@est.ups.edu.ec)
 - Docente: Ing. Pablo Torres  
 
 ---
@@ -75,6 +76,149 @@ El proyecto sigue el patrón de diseño MVC (Modelo-Vista-Controlador), con la s
 - **lib/:** Contiene las dependencias externas `jfreechart-1.5.6.jar` y `jcommon-1.0.24.jar` para la generación de gráficos.
 - **results.csv:** Registro de resultados de ejecuciones previas.
 - **README.md:** Documentación básica del proyecto.
+
+## Diagrama UML
+
+@startuml
+' --- Estilos y Configuración ---
+skinparam classAttributeIconSize 0
+skinparam packageStyle rect
+hide empty members
+
+' --- Enumeraciones y Modelos Simples ---
+package "models" {
+  class Cell {
+    - int row
+    - int col
+    - CellState state
+  }
+
+  enum CellState {
+    WALL
+    PATH
+    START
+    END
+    VISITED
+    SOLUTION
+  }
+
+  class AlgorithmResult {
+    - String algorithmName
+    - long executionTime
+    - int pathLength
+    - int nodesVisited
+  }
+
+  class SolveResults {
+    + List<AlgorithmResult> results
+  }
+}
+
+' --- Interfaces (Contratos) ---
+package "dao" {
+  interface AlgorithmResultDAO <<interface>> {
+    + void save(AlgorithmResult result)
+    + List<AlgorithmResult> getAll()
+  }
+}
+
+package "solver" {
+  interface MazeSolver <<interface>> {
+    + SolveResults solve(Cell[][] maze)
+  }
+}
+
+' --- Implementaciones Concretas ---
+package "dao.daoImpl" {
+  class AlgorithmResultDAOFile implements AlgorithmResultDAO {
+    - String filePath
+    + void save(AlgorithmResult result)
+    + List<AlgorithmResult> getAll()
+  }
+}
+
+package "solver.solverImpl" {
+  class MazeSolverBFS implements MazeSolver
+  class MazeSolverDFS implements MazeSolver
+  class MazeSolverRecursivo implements MazeSolver
+  class MazeSolverRecursivoCompleto implements MazeSolver
+  class MazeSolverRecursivoCompletoBT implements MazeSolver
+}
+
+' --- Vista (UI) ---
+package "views" {
+  class MazeFrame {
+    - MazePanel mazePanel
+    - MazeController controller
+  }
+
+  class MazePanel {
+    - Cell[][] mazeData
+    + void paintComponent(Graphics g)
+  }
+
+  class ResultadosDialog {
+    + void displayResults(SolveResults results)
+  }
+}
+
+' --- Controlador ---
+package "controllers" {
+  class MazeController {
+    - MazeFrame view
+    - MazeSolver solver
+    - AlgorithmResultDAO resultDAO
+    + void solveMaze()
+    + void saveResults()
+  }
+}
+
+' --- Punto de Entrada ---
+class MazeApp {
+  + {static} void main(String[] args)
+}
+
+' --- Relaciones ---
+
+' App -> Controller -> View
+MazeApp ..> MazeController : "crea"
+MazeController -> MazeFrame : "controla"
+MazeFrame ..> MazeController : "notifica eventos"
+
+' Controller -> Model & Solver & DAO
+MazeController o--> MazeSolver : "usa"
+MazeController o--> AlgorithmResultDAO : "usa"
+MazeController ..> SolveResults : "obtiene"
+MazeController ..> AlgorithmResult : "crea"
+
+
+' View -> Model
+MazeFrame *-- MazePanel
+MazeFrame ..> ResultadosDialog : "crea y muestra"
+MazePanel --> Cell : "dibuja"
+ResultadosDialog ..> SolveResults : "muestra"
+
+' DAO y sus relaciones
+AlgorithmResultDAOFile ..> AlgorithmResult : "persiste"
+
+' Agregación de resultados
+SolveResults o-- "1..*" AlgorithmResult
+
+' Relación entre celdas y sus estados
+Cell *-- CellState
+
+' Implementaciones de Solver
+MazeSolver <|.. MazeSolverBFS
+MazeSolver <|.. MazeSolverDFS
+MazeSolver <|.. MazeSolverRecursivo
+MazeSolver <|.. MazeSolverRecursivoCompleto
+MazeSolver <|.. MazeSolverRecursivoCompletoBT
+
+' Los solvers operan sobre celdas
+MazeSolver ..> Cell : "opera sobre"
+
+@enduml
+
 
 ## Marco Teórico
 
@@ -217,6 +361,14 @@ Garantiza la ruta más corta: BFS explora todas las celdas en "capas" concéntri
 Complejidad y eficiencia: Aunque en términos de tiempo de ejecución (medido en milisegundos), a veces un algoritmo como DFS puede ser más rápido si la salida está en un camino recto, la eficiencia de BFS es más predecible. Su complejidad de tiempo es O(V+E), donde V es el número de vértices (celdas) y E es el número de aristas (caminos entre celdas), lo que es muy eficiente.
 
 En resumen, si la meta es siempre encontrar el camino más corto, BFS es la mejor elección. Para propósitos educativos y de demostración, los otros algoritmos son valiosos, pero en aplicaciones prácticas de búsqueda del camino más corto, BFS sobresale.
+
+## Conclusión Dave Fernado Siguencia Vallejo:
+
+## El Algoritmo Más Óptimo es BFS
+
+Si bien BFS es inmejorable para encontrar la ruta más corta en un laberinto, es importante considerar que la "optimización" de un algoritmo a menudo depende del objetivo específico de la aplicación. En escenarios donde el tiempo de ejecución es el factor más crítico y el laberinto es de una complejidad tal que puede explorarse rápidamente, o si simplemente se busca cualquier camino hacia la salida, otros algoritmos pueden ser igualmente válidos o incluso preferibles.
+
+Por ejemplo, el DFS (Depth-First Search), aunque no garantiza la ruta más corta, puede ser extraordinariamente eficiente en términos de uso de memoria, especialmente en laberintos muy grandes o con estructuras lineales. Esto se debe a su naturaleza de "búsqueda profunda", que explora un camino hasta el final antes de retroceder, lo que significa que solo necesita almacenar el camino actual, en contraste con BFS, que debe mantener un registro de todas las celdas en la "capa" actual y las siguientes. En situaciones donde los recursos de memoria son limitados o el laberinto tiene una estructura que favorece una exploración profunda (como un pasillo largo y directo hacia la salida), DFS podría ofrecer una solución lo suficientemente rápida sin la sobrecarga de memoria de BFS.
 
 ## Recomendaciones
 
