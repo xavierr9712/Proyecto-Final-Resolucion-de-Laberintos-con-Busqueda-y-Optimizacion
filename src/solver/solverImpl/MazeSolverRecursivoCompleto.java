@@ -8,26 +8,26 @@ import solver.MazeSolver;
 public class MazeSolverRecursivoCompleto implements MazeSolver {
 
     private List<Cell> path;
+    private List<Cell> visitedCells;
     private boolean[][] visited;
 
     @Override
     public SolveResults solve(Cell[][] maze, Cell start, Cell end) {
         long startTime = System.nanoTime();
         path = new ArrayList<>();
+        visitedCells = new ArrayList<>();
         visited = new boolean[maze.length][maze[0].length];
 
         boolean found = findPath(maze, start.getRow(), start.getCol(), end);
 
         long endTime = System.nanoTime();
-        long duration = (endTime - startTime) / 1000000;
+        long duration = (endTime - startTime);
 
-        if (!found) {
-            path.clear();
-        }
-        
+        if (!found) path.clear();
+
         String mazeSize = maze.length + "x" + maze[0].length;
         AlgorithmResult algoResult = new AlgorithmResult("Recursivo (4 dir)", path.size(), duration, mazeSize);
-        return new SolveResults(path, algoResult);
+        return new SolveResults(visitedCells, path, algoResult);
     }
 
     private boolean findPath(Cell[][] maze, int r, int c, Cell end) {
@@ -36,12 +36,13 @@ public class MazeSolverRecursivoCompleto implements MazeSolver {
         }
 
         visited[r][c] = true;
-        
+        visitedCells.add(maze[r][c]);
+
         if (maze[r][c].equals(end)) {
             path.add(maze[r][c]);
             return true;
         }
-        
+
         if (findPath(maze, r + 1, c, end)) { path.add(0, maze[r][c]); return true; } // Abajo
         if (findPath(maze, r - 1, c, end)) { path.add(0, maze[r][c]); return true; } // Arriba
         if (findPath(maze, r, c + 1, end)) { path.add(0, maze[r][c]); return true; } // Derecha
@@ -49,5 +50,4 @@ public class MazeSolverRecursivoCompleto implements MazeSolver {
 
         return false;
     }
-    
 }

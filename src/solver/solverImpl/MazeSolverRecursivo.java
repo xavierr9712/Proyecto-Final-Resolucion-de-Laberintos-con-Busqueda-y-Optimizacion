@@ -8,26 +8,26 @@ import solver.MazeSolver;
 public class MazeSolverRecursivo implements MazeSolver{
 
     private List<Cell> path;
+    private List<Cell> visitedCells;
     private boolean[][] visited;
 
     @Override
     public SolveResults solve(Cell[][] maze, Cell start, Cell end) {
         long startTime = System.nanoTime();
         path = new ArrayList<>();
+        visitedCells = new ArrayList<>();
         visited = new boolean[maze.length][maze[0].length];
-        
-        boolean found = findPath(maze, start.getRow(), start.getCol(), end);
-        
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime) / 1000000;
 
-        if (!found) {
-            path.clear();
-        }
+        boolean found = findPath(maze, start.getRow(), start.getCol(), end);
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+
+        if (!found) path.clear();
 
         String mazeSize = maze.length + "x" + maze[0].length;
         AlgorithmResult algoResult = new AlgorithmResult("Recursivo (2 dir)", path.size(), duration, mazeSize);
-        return new SolveResults(path, algoResult);
+        return new SolveResults(visitedCells, path, algoResult);
     }
 
     private boolean findPath(Cell[][] maze, int r, int c, Cell end) {
@@ -36,17 +36,15 @@ public class MazeSolverRecursivo implements MazeSolver{
         }
 
         visited[r][c] = true;
+        visitedCells.add(maze[r][c]);
         path.add(maze[r][c]);
 
-        if (maze[r][c].equals(end)) {
-            return true;
-        }
+        if (maze[r][c].equals(end)) return true;
 
         if (findPath(maze, r, c + 1, end)) return true;
         if (findPath(maze, r + 1, c, end)) return true;
 
-        path.remove(path.size() - 1); 
+        path.remove(path.size() - 1);
         return false;
     }
-    
 }

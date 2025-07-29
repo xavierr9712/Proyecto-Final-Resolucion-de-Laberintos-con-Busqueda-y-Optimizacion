@@ -9,7 +9,7 @@ public class MazeSolverBFS implements MazeSolver{
     public SolveResults solve(Cell[][] maze, Cell start, Cell end) {
         long startTime = System.nanoTime();
         Queue<Cell> queue = new LinkedList<>();
-        Set<Cell> visited = new HashSet<>();
+        List<Cell> visited = new ArrayList<>();
         
         start.setParent(null);
         queue.add(start);
@@ -36,7 +36,7 @@ public class MazeSolverBFS implements MazeSolver{
         }
         
         long endTime = System.nanoTime();
-        long duration = (endTime - startTime) / 1000000; 
+        long duration = (endTime - startTime); 
 
         List<Cell> path = new ArrayList<>();
         if (found) {
@@ -50,7 +50,7 @@ public class MazeSolverBFS implements MazeSolver{
 
         String mazeSize = maze.length + "x" + maze[0].length;
         AlgorithmResult algoResult = new AlgorithmResult("BFS", path.size(), duration, mazeSize);
-        return new SolveResults(path, algoResult);
+        return new SolveResults(visited, path, algoResult);
     }
 
     private List<Cell> getNeighbors(Cell[][] maze, Cell cell) {

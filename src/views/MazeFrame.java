@@ -7,6 +7,7 @@ import models.Cell;
 
 public class MazeFrame extends JFrame {
     private MazePanel mazePanel;
+    private boolean stepByStepActive = false;
     private MazeController controller;
     private JComboBox<String> algorithmSelector;
     private JRadioButton rbSetWall, rbSetStart, rbSetEnd;
@@ -16,7 +17,7 @@ public class MazeFrame extends JFrame {
 
     public MazeFrame() {
         setTitle("Resolvedor de Laberintos");
-        setSize(800, 600);
+        setSize(1400, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -46,6 +47,12 @@ public class MazeFrame extends JFrame {
 
         JButton solveButton = new JButton("Resolver");
         controlPanel.add(solveButton);
+
+        JButton stepByStepButton = new JButton("Resolver Paso a Paso");
+        controlPanel.add(stepByStepButton);
+
+        JButton clearPathsButton = new JButton("Limpiar Caminos");
+        controlPanel.add(clearPathsButton);
         
         rbSetWall = new JRadioButton("Poner Muro", true);
         rbSetStart = new JRadioButton("Poner Inicio");
@@ -84,7 +91,18 @@ public class MazeFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Por favor, introduce números válidos para filas y columnas.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
             }
         });
-        
+
+        stepByStepButton.addActionListener(e -> {
+            String selectedAlgorithm = (String) algorithmSelector.getSelectedItem();
+
+            if (!stepByStepActive) {
+                controller.startStepByStepSolve(selectedAlgorithm);
+                stepByStepActive = true;
+            } else {
+                controller.doStep();
+            }
+        });
+
         solveButton.addActionListener(e -> {
             if (controller != null) {
                 String selectedAlgorithm = (String) algorithmSelector.getSelectedItem();
@@ -99,6 +117,17 @@ public class MazeFrame extends JFrame {
         clearResultsButton.addActionListener(e -> {
             if (controller != null) controller.clearResults();
         });
+
+        clearPathsButton.addActionListener(e -> {
+            if (controller != null) {
+                controller.clearPathsOnly();
+                stepByStepActive = false; // reiniciar también el modo paso a paso
+            }
+        });
+    }
+
+    public void resetStepByStepFlag() {
+        stepByStepActive = false;
     }
 
     public void setController(MazeController controller) {

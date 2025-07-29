@@ -1,6 +1,10 @@
-BFS,39,1,20x20
-DFS,257,1,20x20
-DFS,257,0,20x20
-Recursivo (2 dir),39,0,20x20
-Recursivo (4 dir),281,0,20x20
-Recursivo (4 dir + BT),281,0,20x20
+BFS,19,902800,10x10
+BFS,19,804900,10x10
+DFS,61,751100,10x10
+Recursivo (2 dir),19,29900,10x10
+Recursivo (4 dir),49,56900,10x10
+Recursivo (4 dir + BT),49,34500,10x10
+BFS,19,284300,10x10
+DFS,47,782600,10x10
+Recursivo (2 dir),19,29000,10x10
+Recursivo (4 dir + BT),57,39500,10x10
