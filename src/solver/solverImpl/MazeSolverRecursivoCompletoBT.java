@@ -22,13 +22,12 @@ public class MazeSolverRecursivoCompletoBT implements MazeSolver {
         boolean found = findPath(maze, start.getRow(), start.getCol(), end);
 
         long endTime = System.nanoTime();
-        long duration = (endTime - startTime);
-
-        if (found) {
-            Collections.reverse(path);
-        } else {
-            path.clear();
-        }
+long duration = (endTime - startTime);
+if (found) {
+    Collections.reverse(path);
+} else {
+    path.clear();
+}
 
         String mazeSize = maze.length + "x" + maze[0].length;
         AlgorithmResult algoResult = new AlgorithmResult("Recursivo (4 dir + BT)", path.size(), duration, mazeSize);

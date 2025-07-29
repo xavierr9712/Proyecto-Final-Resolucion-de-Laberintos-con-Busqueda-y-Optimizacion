@@ -1,2 +1,21 @@
+<<<<<<< HEAD
 BFS,21,142800,10x10
 DFS,19,127700,10x10
+=======
+<<<<<<< HEAD
+BFS,18,1,10x10
+DFS,30,2,10x10
+Recursivo (2 dir),18,0,10x10
+Recursivo (4 dir),34,0,10x10
+Recursivo (4 dir + BT),34,0,10x10
+BFS,19,1166500,10x10
+DFS,35,1920900,10x10
+Recursivo (2 dir),19,74700,10x10
+Recursivo (4 dir),55,104300,10x10
+Recursivo (4 dir),55,146800,10x10
+=======
+BFS,11,160400,10x10
+>>>>>>> abc873989e8fbc7f88c2cf9da7e7a783135cdfd0
+BFS,39,8543700,20x20
+DFS,157,2236400,20x20
+>>>>>>> 080a57ea9a2bf117e0404eb6d360a472a0c0d407

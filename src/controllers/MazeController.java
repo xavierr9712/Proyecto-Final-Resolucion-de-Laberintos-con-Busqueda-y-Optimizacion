@@ -203,34 +203,34 @@ public class MazeController {
         List<Cell> visited = result.getVisited();
         List<Cell> path = result.getPath();
 
-        new Thread(() -> {
-            try {
-                // Primero, animar las celdas visitadas (gris)
-                for (Cell cell : visited) {
-                    if (cell != start && cell != end && cell.getState() != CellState.WALL) {
-                        cell.setState(CellState.VISITED);
-                        SwingUtilities.invokeLater(() -> view.updateMaze(maze));
-                        Thread.sleep(30); // puedes ajustar velocidad
-                    }
+    new Thread(() -> {
+        try {
+            // Primero, animar las celdas visitadas (gris)
+            for (Cell cell : visited) {
+                if (cell != start && cell != end && cell.getState() != CellState.WALL) {
+                    cell.setState(CellState.VISITED);
+                    SwingUtilities.invokeLater(() -> view.updateMaze(maze));
+                    Thread.sleep(30); // puedes ajustar velocidad
                 }
-
-                // Luego, animar el camino final (celeste)
-                for (Cell cell : path) {
-                    if (cell != start && cell != end) {
-                        cell.setState(CellState.PATH);
-                        SwingUtilities.invokeLater(() -> view.updateMaze(maze));
-                        Thread.sleep(50); // puedes ajustar velocidad
-                    }
-                }
-
-                // Guardar resultados
-                resultDAO.save(result.getResultDetails());
-
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
             }
-        }).start();
-    }
+
+            // Luego, animar el camino final (celeste)
+            for (Cell cell : path) {
+                if (cell != start && cell != end) {
+                    cell.setState(CellState.PATH);
+                    SwingUtilities.invokeLater(() -> view.updateMaze(maze));
+                    Thread.sleep(50); // puedes ajustar velocidad
+                }
+            }
+
+            // Guardar resultados
+            resultDAO.save(result.getResultDetails());
+
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+    }).start();
+}
     
     // Método auxiliar para crear una copia profunda del laberinto
     private Cell[][] createDeepCopyOfMaze(Cell[][] originalMaze) {
